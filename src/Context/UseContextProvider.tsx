@@ -1,30 +1,27 @@
 import { UserContext } from "./UserContext";
 import { UserProviderProps } from "../interface/Interface";
+import { useState } from "react";
+import { Login, User } from "../types/Types";
+import { getLocalStorage, setLocalStorage } from "../services/UseLocalStorage";
 
 export const UseContextProvider = ({ children }: UserProviderProps) => {
-  // const setDataUser = (data: User): void => {
-  //   return setLocalStorage(data);
-  // };
+  const [, setDataUser] = useState<Login | null>();
 
-  const getDataUser = () => {
-    return console.log("User");
+  const getUser = (): User => {
+    return getLocalStorage();
   };
 
-  // const validateUser = (data: Login): void => {
-  //   const dataUser = getDataUser();
-  //   if (dataUser.email === "" || dataUser.password === "") {
-  //     console.log("The user could not be found");
-  //   } else if (
-  //     data.email !== dataUser.email ||
-  //     data.password !== dataUser.password
-  //   ) {
-  //     console.log("Incorrect username / password");
-  //   } else {
-  //     console.log("Congratulations successful login");
-  //   }
-  // };
+  const Login = (data: Login): void => {
+    setLocalStorage(data);
+    setDataUser(data);
+  };
+
+  const Logout = () => {
+    setLocalStorage(null);
+    setDataUser(null);
+  };
   return (
-    <UserContext.Provider value={{ getDataUser }}>
+    <UserContext.Provider value={{ getUser, Login, setDataUser, Logout }}>
       {children}
     </UserContext.Provider>
   );

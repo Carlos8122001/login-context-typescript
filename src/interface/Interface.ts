@@ -1,7 +1,12 @@
+import { Login, User } from "../types/Types";
+
 export interface UserProviderProps {
   children: JSX.Element | JSX.Element[];
 }
 
 export interface UserContextProps {
-  getDataUser: () => void;
+  setDataUser: (userAuth: User) => void;
+  getUser: () => User;
+  Login: (userAuth: Login) => void;
+  Logout: () => void;
 }

@@ -1,12 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import { CustomRoutes } from "./routes/CustomRoutes";
+import { UseContextProvider } from "./Context/UseContextProvider";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <CustomRoutes />
-      </BrowserRouter>
+      <UseContextProvider>
+        <BrowserRouter>
+          <CustomRoutes />
+        </BrowserRouter>
+      </UseContextProvider>
     </>
   );
 }

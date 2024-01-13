@@ -10,8 +10,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link as RouterLink } from "react-router-dom";
-import { UseContextProvider } from "../Context/UseContextProvider";
 import { Login } from "../types/Types";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
+import { UserContextProps } from "../interface/Interface";
 
 export const FormLogin = () => {
   const {
@@ -20,84 +22,87 @@ export const FormLogin = () => {
     formState: { errors },
   } = useForm<Login>();
 
+  const { Login } = useContext(UserContext) as UserContextProps;
+
   const onSubmit: SubmitHandler<Login> = (data) => {
     console.log(data);
+    if (data) {
+      Login(data);
+    }
   };
 
   return (
     <>
-      <UseContextProvider>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
           <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{ mt: 1 }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit(onSubmit)}
-              noValidate
-              sx={{ mt: 1 }}
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email Address"
+              autoComplete="off"
+              autoFocus
+              {...register("email", {
+                required: true,
+              })}
+              error={errors.email ? true : false}
+              helperText={errors.email && "The field email is empty"}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="off"
+              {...register("password", {
+                required: true,
+              })}
+              error={errors.email ? true : false}
+              helperText={errors.email && "The field password is empty"}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
             >
-              <TextField
-                margin="normal"
-                fullWidth
-                id="email"
-                label="Email Address"
-                autoComplete="off"
-                autoFocus
-                {...register("email", {
-                  required: true,
-                })}
-                error={errors.email ? true : false}
-                helperText={errors.email && "The field email is empty"}
-              />
-              <TextField
-                margin="normal"
-                fullWidth
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="off"
-                {...register("password", {
-                  required: true,
-                })}
-                error={errors.email ? true : false}
-                helperText={errors.email && "The field password is empty"}
-              />
+              Sign In
+            </Button>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-
-              <Grid container justifyContent={"end"}>
-                <Grid item>
-                  <RouterLink to={"/register"}>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </RouterLink>
-                </Grid>
+            <Grid container justifyContent={"end"}>
+              <Grid item>
+                <RouterLink to={"/register"}>
+                  <Link href="#" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </RouterLink>
               </Grid>
-            </Box>
+            </Grid>
           </Box>
-        </Container>
-      </UseContextProvider>
+        </Box>
+      </Container>
     </>
   );
 };
